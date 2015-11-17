@@ -1,34 +1,35 @@
 package br.com.rf.scheduling.entity;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import br.com.rf.scheduling.utils.AppUtils;
+
+/**
+ * @author tiago.freitas
+ *
+ */
 public class TransactionD extends AbstractTransaction{
 
-	Map<Boolean, Double> rulesValuesTransaction;
+	Map<Boolean, Transaction> rulesValuesTransaction;
 	
-	public TransactionD(double transferValue) {
+	public TransactionD(BigDecimal transferValue) {
 		super(transferValue);
 	}
-	
 
 	@Override
-	public double calculateRate() {
+	public BigDecimal calculateRate(Scheduling scheduling) {
 		
-		rulesValuesTransaction = new HashMap<Boolean, Double>();
-		rulesValuesTransaction.put(25000.00 >= getTransferValue(), new TransactionA(getTransferValue()).calculateRate());
-		rulesValuesTransaction.put(25001.00 <= getTransferValue() && 120000.00 >= getTransferValue(), new TransactionB(getTransferValue()).calculateRate());
-		rulesValuesTransaction.put(120000.00 < getTransferValue(), new TransactionC(getTransferValue()).calculateRate());
+		rulesValuesTransaction = new HashMap<Boolean, Transaction>();
+		rulesValuesTransaction.put(AppUtils.compareEqualsOrFirstNumberMajor(new BigDecimal("25000.0"), getTransferValue()) , new TransactionA(getTransferValue()));
+		rulesValuesTransaction.put(AppUtils.compareEqualsOrFirstNumberMinor(new BigDecimal("25001.0"), getTransferValue())  
+									&& AppUtils.compareEqualsOrFirstNumberMajor(new BigDecimal("120000.0"), getTransferValue()), new TransactionB(getTransferValue()));
+		rulesValuesTransaction.put(AppUtils.compareFirstNumberMinor(new BigDecimal("120000.0"), getTransferValue()), new TransactionC(getTransferValue()));
 		
-		return rulesValuesTransaction.get(true);
-	}
-
-	@Override
-	public double calculateRate(Scheduling scheduling) {
-		// TODO Auto-generated method stub
-		return 0;
+		return rulesValuesTransaction.get(true).calculateRate(scheduling);
 	}
 
 }

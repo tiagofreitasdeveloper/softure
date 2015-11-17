@@ -1,29 +1,30 @@
 package br.com.rf.scheduling.entity;
 
+import java.math.BigDecimal;
+
 import br.com.rf.scheduling.service.CalculateDate;
 import br.com.rf.scheduling.utils.RulesEnum;
 
+/**
+ * @author tiago.freitas
+ *
+ */
 public class TransactionB extends AbstractTransaction{
 	
 	private Scheduling scheduling;
 	
-	public TransactionB(double transferValue) {
+	public TransactionB(BigDecimal transferValue) {
 		super(transferValue);
 	}
 
 	@Override
-	public double calculateRate() {
-		return 0;
-	}
-
-	@Override
-	public double calculateRate(Scheduling scheduling) {
+	public BigDecimal calculateRate(Scheduling scheduling) {
 		
 		long interval = new CalculateDate(scheduling.getDateRegister(), scheduling.getDateShcheduling()).diffTwoDates();
 		
 		RulesEnum ruleEnum = RulesEnum.isIntervalDate(interval, "B");
 		
-		return !ruleEnum.equals(null) ? ruleEnum.getFlatRate() : 8.0;
+		return ruleEnum != null ? ruleEnum.getFlatRate() : new BigDecimal("8.0");
 				
 	}
 

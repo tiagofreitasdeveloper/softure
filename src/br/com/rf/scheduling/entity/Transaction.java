@@ -1,10 +1,14 @@
 package br.com.rf.scheduling.entity;
 
+import java.math.BigDecimal;
+
+/**
+ * @author tiago.freitas
+ *
+ */
 public interface Transaction {
 	
-	double calculateRate();
+	BigDecimal calculateRate(Scheduling scheduling);
 	
-	double calculateRate(Scheduling scheduling);
-	
-	double getTransferValue();
+	BigDecimal getTransferValue();
 }

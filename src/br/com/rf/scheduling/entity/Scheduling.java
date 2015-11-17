@@ -4,6 +4,11 @@ import java.time.LocalDateTime;
 
 import br.com.rf.scheduling.service.CalculateDate;
 
+
+/**
+ * @author tiago.freitas
+ *
+ */
 public class Scheduling {
 	
 	private Account originAccount;
